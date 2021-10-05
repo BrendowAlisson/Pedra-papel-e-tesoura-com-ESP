@@ -4,8 +4,8 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-const char* WIFI_SSID = "NETSULMINAS-Casa";
-const char* WIFI_PASS = "Babebi123@";
+const char* WIFI_SSID = "SEU SSID DO WIFI";
+const char* WIFI_PASS = "SUA SENHA WIFI";
 unsigned int timer = millis() + 4000;
 
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
@@ -50,7 +50,6 @@ void serveJpg()
   frame->writeTo(client);
 }
 
-
 void handleJpgHi()
 {
   if (!esp32cam::Camera.changeResolution(hiRes)) {
@@ -65,13 +64,13 @@ void handleJpg()
   server.send(302, "", "");
 }
 
-
 void setup()
 {
   Serial.begin(115200);
   Serial.println();
   
   Wire.begin(I2C_SDA, I2C_SCL);
+  
   pwm.begin();  //Inicializa a biblioteca e envia sinais PWM.
   pwm.setPWMFreq(FREQUENCY); //Frequência de atualização do servo a 60 Hertz.
   pwm.setPWM(0,0,pulseWidth(180)); 
@@ -103,11 +102,14 @@ void setup()
   Serial.print("http://");
   Serial.println(WiFi.localIP());
   Serial.println("  /cam-hi.jpg");
+  
   server.on("/cam-hi.jpg", handleJpgHi);
+  
   server.on("/flash", HTTP_GET, [](){
     server.send(200, "text/plain", "flash ligado!");
     digitalWrite(flash, HIGH);
   });
+  
   server.on("/flash-desligado", HTTP_GET, [](){
     server.send(200, "text/plan", "flash desligado!");
     digitalWrite(flash, LOW);
@@ -183,17 +185,9 @@ void setup()
     pwm.setPWM(3, 0, pulseWidth(10));
     pwm.setPWM(4, 0, pulseWidth(180));
   });
-
-  server.on("/meio", HTTP_GET, [](){
-    server.send(200,"text/plan", "dedo do meio");
-    pwm.setPWM(0, 0, pulseWidth(10));
-    pwm.setPWM(1, 0, pulseWidth(10));
-    pwm.setPWM(2, 0, pulseWidth(180));
-    pwm.setPWM(3, 0, pulseWidth(10));
-    pwm.setPWM(4, 0, pulseWidth(180));
-  });
-
+  
   server.begin();
+
 }
 
 void loop()
