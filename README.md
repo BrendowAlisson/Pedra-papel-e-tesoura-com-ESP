@@ -5,4 +5,5 @@ Para esse projeto foram utilizados:
 - 1 ESP 32 CAM;
 - 1 Módulo PWM PCA9685 I2C;
 - 3 Baterias de Lítio 3.7 V;
-- 5 Micro-servos SG90.
+- 5 Micro-servos SG90;
+- Jumpers.
